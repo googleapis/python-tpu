@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0](https://www.github.com/googleapis/python-tpu/compare/v0.2.1...v0.3.0) (2021-07-24)
+
+
+### Features
+
+* add Samples section to CONTRIBUTING.rst ([#20](https://www.github.com/googleapis/python-tpu/issues/20)) ([2724d46](https://www.github.com/googleapis/python-tpu/commit/2724d4653cc4c261f578a9862a4ba0adfa065236))
+
+
+### Bug Fixes
+
+* enable self signed jwt for grpc ([#24](https://www.github.com/googleapis/python-tpu/issues/24)) ([4285625](https://www.github.com/googleapis/python-tpu/commit/4285625fc0f935820dbb428606730f10033f1974))
+
 ### [0.2.1](https://www.github.com/googleapis/python-tpu/compare/v0.2.0...v0.2.1) (2021-07-21)
 
 
