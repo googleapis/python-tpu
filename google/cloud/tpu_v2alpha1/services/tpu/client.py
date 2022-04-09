@@ -16,7 +16,7 @@
 from collections import OrderedDict
 import os
 import re
-from typing import Dict, Optional, Sequence, Tuple, Type, Union
+from typing import Dict, Mapping, Optional, Sequence, Tuple, Type, Union
 import pkg_resources
 
 from google.api_core import client_options as client_options_lib
@@ -487,7 +487,7 @@ class TpuClient(metaclass=TpuClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import tpu_v2alpha1
+                    from google.cloud import tpu_v2alpha1
 
             def sample_list_nodes():
                 # Create a client
@@ -593,7 +593,7 @@ class TpuClient(metaclass=TpuClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import tpu_v2alpha1
+                    from google.cloud import tpu_v2alpha1
 
             def sample_get_node():
                 # Create a client
@@ -686,7 +686,7 @@ class TpuClient(metaclass=TpuClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import tpu_v2alpha1
+                    from google.cloud import tpu_v2alpha1
 
             def sample_create_node():
                 # Create a client
@@ -813,7 +813,7 @@ class TpuClient(metaclass=TpuClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import tpu_v2alpha1
+                    from google.cloud import tpu_v2alpha1
 
             def sample_delete_node():
                 # Create a client
@@ -922,7 +922,7 @@ class TpuClient(metaclass=TpuClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import tpu_v2alpha1
+                    from google.cloud import tpu_v2alpha1
 
             def sample_stop_node():
                 # Create a client
@@ -1010,7 +1010,7 @@ class TpuClient(metaclass=TpuClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import tpu_v2alpha1
+                    from google.cloud import tpu_v2alpha1
 
             def sample_start_node():
                 # Create a client
@@ -1100,7 +1100,7 @@ class TpuClient(metaclass=TpuClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import tpu_v2alpha1
+                    from google.cloud import tpu_v2alpha1
 
             def sample_update_node():
                 # Create a client
@@ -1226,7 +1226,7 @@ class TpuClient(metaclass=TpuClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import tpu_v2alpha1
+                    from google.cloud import tpu_v2alpha1
 
             def sample_generate_service_identity():
                 # Create a client
@@ -1303,7 +1303,7 @@ class TpuClient(metaclass=TpuClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import tpu_v2alpha1
+                    from google.cloud import tpu_v2alpha1
 
             def sample_list_accelerator_types():
                 # Create a client
@@ -1409,7 +1409,7 @@ class TpuClient(metaclass=TpuClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import tpu_v2alpha1
+                    from google.cloud import tpu_v2alpha1
 
             def sample_get_accelerator_type():
                 # Create a client
@@ -1502,7 +1502,7 @@ class TpuClient(metaclass=TpuClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import tpu_v2alpha1
+                    from google.cloud import tpu_v2alpha1
 
             def sample_list_runtime_versions():
                 # Create a client
@@ -1608,7 +1608,7 @@ class TpuClient(metaclass=TpuClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import tpu_v2alpha1
+                    from google.cloud import tpu_v2alpha1
 
             def sample_get_runtime_version():
                 # Create a client
@@ -1700,7 +1700,7 @@ class TpuClient(metaclass=TpuClientMeta):
 
         .. code-block:: python
 
-            from google.cloud import tpu_v2alpha1
+                    from google.cloud import tpu_v2alpha1
 
             def sample_get_guest_attributes():
                 # Create a client
