@@ -3867,7 +3867,6 @@ def test_tpu_transport_auth_adc(transport_class):
     [
         transports.TpuGrpcTransport,
         transports.TpuGrpcAsyncIOTransport,
-        transports.TpuRestTransport,
     ],
 )
 def test_tpu_transport_auth_gdch_credentials(transport_class):
