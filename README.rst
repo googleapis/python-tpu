@@ -3,7 +3,7 @@ Python Client for Cloud TPU API
 
 |stable| |pypi| |versions|
 
-`Cloud TPU API`_: 
+`Cloud TPU API`_: are Google's custom-developed application-specific integrated circuits (ASICs) used to accelerate machine learning workloads.
 
 - `Client Library Documentation`_
 - `Product Documentation`_
