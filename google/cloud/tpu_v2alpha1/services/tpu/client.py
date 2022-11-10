@@ -16,7 +16,18 @@
 from collections import OrderedDict
 import os
 import re
-from typing import Dict, Mapping, Optional, Sequence, Tuple, Type, Union, cast
+from typing import (
+    Dict,
+    Mapping,
+    MutableMapping,
+    MutableSequence,
+    Optional,
+    Sequence,
+    Tuple,
+    Type,
+    Union,
+    cast,
+)
 
 from google.api_core import client_options as client_options_lib
 from google.api_core import exceptions as core_exceptions
@@ -61,7 +72,7 @@ class TpuClientMeta(type):
 
     def get_transport_class(
         cls,
-        label: str = None,
+        label: Optional[str] = None,
     ) -> Type[TpuTransport]:
         """Returns an appropriate transport class.
 
@@ -382,7 +393,7 @@ class TpuClient(metaclass=TpuClientMeta):
         self,
         *,
         credentials: Optional[ga_credentials.Credentials] = None,
-        transport: Union[str, TpuTransport, None] = None,
+        transport: Optional[Union[str, TpuTransport]] = None,
         client_options: Optional[Union[client_options_lib.ClientOptions, dict]] = None,
         client_info: gapic_v1.client_info.ClientInfo = DEFAULT_CLIENT_INFO,
     ) -> None:
@@ -480,11 +491,11 @@ class TpuClient(metaclass=TpuClientMeta):
 
     def list_nodes(
         self,
-        request: Union[cloud_tpu.ListNodesRequest, dict] = None,
+        request: Optional[Union[cloud_tpu.ListNodesRequest, dict]] = None,
         *,
-        parent: str = None,
+        parent: Optional[str] = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: float = None,
+        timeout: Optional[float] = None,
         metadata: Sequence[Tuple[str, str]] = (),
     ) -> pagers.ListNodesPager:
         r"""Lists nodes.
@@ -593,11 +604,11 @@ class TpuClient(metaclass=TpuClientMeta):
 
     def get_node(
         self,
-        request: Union[cloud_tpu.GetNodeRequest, dict] = None,
+        request: Optional[Union[cloud_tpu.GetNodeRequest, dict]] = None,
         *,
-        name: str = None,
+        name: Optional[str] = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: float = None,
+        timeout: Optional[float] = None,
         metadata: Sequence[Tuple[str, str]] = (),
     ) -> cloud_tpu.Node:
         r"""Gets the details of a node.
@@ -691,13 +702,13 @@ class TpuClient(metaclass=TpuClientMeta):
 
     def create_node(
         self,
-        request: Union[cloud_tpu.CreateNodeRequest, dict] = None,
+        request: Optional[Union[cloud_tpu.CreateNodeRequest, dict]] = None,
         *,
-        parent: str = None,
-        node: cloud_tpu.Node = None,
-        node_id: str = None,
+        parent: Optional[str] = None,
+        node: Optional[cloud_tpu.Node] = None,
+        node_id: Optional[str] = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: float = None,
+        timeout: Optional[float] = None,
         metadata: Sequence[Tuple[str, str]] = (),
     ) -> operation.Operation:
         r"""Creates a node.
@@ -827,11 +838,11 @@ class TpuClient(metaclass=TpuClientMeta):
 
     def delete_node(
         self,
-        request: Union[cloud_tpu.DeleteNodeRequest, dict] = None,
+        request: Optional[Union[cloud_tpu.DeleteNodeRequest, dict]] = None,
         *,
-        name: str = None,
+        name: Optional[str] = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: float = None,
+        timeout: Optional[float] = None,
         metadata: Sequence[Tuple[str, str]] = (),
     ) -> operation.Operation:
         r"""Deletes a node.
@@ -942,10 +953,10 @@ class TpuClient(metaclass=TpuClientMeta):
 
     def stop_node(
         self,
-        request: Union[cloud_tpu.StopNodeRequest, dict] = None,
+        request: Optional[Union[cloud_tpu.StopNodeRequest, dict]] = None,
         *,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: float = None,
+        timeout: Optional[float] = None,
         metadata: Sequence[Tuple[str, str]] = (),
     ) -> operation.Operation:
         r"""Stops a node. This operation is only available with
@@ -1038,10 +1049,10 @@ class TpuClient(metaclass=TpuClientMeta):
 
     def start_node(
         self,
-        request: Union[cloud_tpu.StartNodeRequest, dict] = None,
+        request: Optional[Union[cloud_tpu.StartNodeRequest, dict]] = None,
         *,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: float = None,
+        timeout: Optional[float] = None,
         metadata: Sequence[Tuple[str, str]] = (),
     ) -> operation.Operation:
         r"""Starts a node.
@@ -1133,12 +1144,12 @@ class TpuClient(metaclass=TpuClientMeta):
 
     def update_node(
         self,
-        request: Union[cloud_tpu.UpdateNodeRequest, dict] = None,
+        request: Optional[Union[cloud_tpu.UpdateNodeRequest, dict]] = None,
         *,
-        node: cloud_tpu.Node = None,
-        update_mask: field_mask_pb2.FieldMask = None,
+        node: Optional[cloud_tpu.Node] = None,
+        update_mask: Optional[field_mask_pb2.FieldMask] = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: float = None,
+        timeout: Optional[float] = None,
         metadata: Sequence[Tuple[str, str]] = (),
     ) -> operation.Operation:
         r"""Updates the configurations of a node.
@@ -1266,10 +1277,10 @@ class TpuClient(metaclass=TpuClientMeta):
 
     def generate_service_identity(
         self,
-        request: Union[cloud_tpu.GenerateServiceIdentityRequest, dict] = None,
+        request: Optional[Union[cloud_tpu.GenerateServiceIdentityRequest, dict]] = None,
         *,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: float = None,
+        timeout: Optional[float] = None,
         metadata: Sequence[Tuple[str, str]] = (),
     ) -> cloud_tpu.GenerateServiceIdentityResponse:
         r"""Generates the Cloud TPU service identity for the
@@ -1350,11 +1361,11 @@ class TpuClient(metaclass=TpuClientMeta):
 
     def list_accelerator_types(
         self,
-        request: Union[cloud_tpu.ListAcceleratorTypesRequest, dict] = None,
+        request: Optional[Union[cloud_tpu.ListAcceleratorTypesRequest, dict]] = None,
         *,
-        parent: str = None,
+        parent: Optional[str] = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: float = None,
+        timeout: Optional[float] = None,
         metadata: Sequence[Tuple[str, str]] = (),
     ) -> pagers.ListAcceleratorTypesPager:
         r"""Lists accelerator types supported by this API.
@@ -1463,11 +1474,11 @@ class TpuClient(metaclass=TpuClientMeta):
 
     def get_accelerator_type(
         self,
-        request: Union[cloud_tpu.GetAcceleratorTypeRequest, dict] = None,
+        request: Optional[Union[cloud_tpu.GetAcceleratorTypeRequest, dict]] = None,
         *,
-        name: str = None,
+        name: Optional[str] = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: float = None,
+        timeout: Optional[float] = None,
         metadata: Sequence[Tuple[str, str]] = (),
     ) -> cloud_tpu.AcceleratorType:
         r"""Gets AcceleratorType.
@@ -1563,11 +1574,11 @@ class TpuClient(metaclass=TpuClientMeta):
 
     def list_runtime_versions(
         self,
-        request: Union[cloud_tpu.ListRuntimeVersionsRequest, dict] = None,
+        request: Optional[Union[cloud_tpu.ListRuntimeVersionsRequest, dict]] = None,
         *,
-        parent: str = None,
+        parent: Optional[str] = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: float = None,
+        timeout: Optional[float] = None,
         metadata: Sequence[Tuple[str, str]] = (),
     ) -> pagers.ListRuntimeVersionsPager:
         r"""Lists runtime versions supported by this API.
@@ -1676,11 +1687,11 @@ class TpuClient(metaclass=TpuClientMeta):
 
     def get_runtime_version(
         self,
-        request: Union[cloud_tpu.GetRuntimeVersionRequest, dict] = None,
+        request: Optional[Union[cloud_tpu.GetRuntimeVersionRequest, dict]] = None,
         *,
-        name: str = None,
+        name: Optional[str] = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: float = None,
+        timeout: Optional[float] = None,
         metadata: Sequence[Tuple[str, str]] = (),
     ) -> cloud_tpu.RuntimeVersion:
         r"""Gets a runtime version.
@@ -1776,10 +1787,10 @@ class TpuClient(metaclass=TpuClientMeta):
 
     def get_guest_attributes(
         self,
-        request: Union[cloud_tpu.GetGuestAttributesRequest, dict] = None,
+        request: Optional[Union[cloud_tpu.GetGuestAttributesRequest, dict]] = None,
         *,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: float = None,
+        timeout: Optional[float] = None,
         metadata: Sequence[Tuple[str, str]] = (),
     ) -> cloud_tpu.GetGuestAttributesResponse:
         r"""Retrieves the guest attributes for the node.
