@@ -7,12 +7,12 @@
         "google/cloud/tpu/gapic_version.py",
         {
           "type": "json",
-          "path": "samples/generated_samples/snippet_metadata_tpu_v1.json",
+          "path": "samples/generated_samples/snippet_metadata_google.cloud.tpu.v2alpha1.json",
           "jsonpath": "$.clientLibrary.version"
         },
         {
           "type": "json",
-          "path": "samples/generated_samples/snippet_metadata_tpu_v2alpha1.json",
+          "path": "samples/generated_samples/snippet_metadata_google.cloud.tpu.v1.json",
           "jsonpath": "$.clientLibrary.version"
         }
       ]
