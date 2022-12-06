@@ -15,15 +15,12 @@
 #
 from typing import MutableMapping, MutableSequence
 
-from google.protobuf import duration_pb2  # type: ignore
 from google.protobuf import field_mask_pb2  # type: ignore
 from google.protobuf import timestamp_pb2  # type: ignore
-from google.rpc import status_pb2  # type: ignore
-from google.type import interval_pb2  # type: ignore
 import proto  # type: ignore
 
 __protobuf__ = proto.module(
-    package="google.cloud.tpu.v2alpha1",
+    package="google.cloud.tpu.v2",
     manifest={
         "GuestAttributes",
         "GuestAttributesValue",
@@ -35,8 +32,6 @@ __protobuf__ = proto.module(
         "NetworkConfig",
         "ServiceAccount",
         "Node",
-        "QueuedResource",
-        "QueuedResourceState",
         "ListNodesRequest",
         "ListNodesResponse",
         "GetNodeRequest",
@@ -45,11 +40,6 @@ __protobuf__ = proto.module(
         "StopNodeRequest",
         "StartNodeRequest",
         "UpdateNodeRequest",
-        "ListQueuedResourcesRequest",
-        "ListQueuedResourcesResponse",
-        "GetQueuedResourceRequest",
-        "CreateQueuedResourceRequest",
-        "DeleteQueuedResourceRequest",
         "ServiceIdentity",
         "GenerateServiceIdentityRequest",
         "GenerateServiceIdentityResponse",
@@ -65,7 +55,6 @@ __protobuf__ = proto.module(
         "Symptom",
         "GetGuestAttributesRequest",
         "GetGuestAttributesResponse",
-        "SimulateMaintenanceEventRequest",
         "ShieldedInstanceConfig",
     },
 )
@@ -80,7 +69,7 @@ class GuestAttributes(proto.Message):
             default namespace ('/') or a nested namespace
             ('/\<namespace\>/') or a specified key
             ('/\<namespace\>/\<key\>')
-        query_value (google.cloud.tpu_v2alpha1.types.GuestAttributesValue):
+        query_value (google.cloud.tpu_v2.types.GuestAttributesValue):
             The value of the requested queried path.
     """
 
@@ -99,7 +88,7 @@ class GuestAttributesValue(proto.Message):
     r"""Array of guest attribute namespace/key/value tuples.
 
     Attributes:
-        items (MutableSequence[google.cloud.tpu_v2alpha1.types.GuestAttributesEntry]):
+        items (MutableSequence[google.cloud.tpu_v2.types.GuestAttributesEntry]):
             The list of guest attributes entries.
     """
 
@@ -145,7 +134,7 @@ class AttachedDisk(proto.Message):
             Specifies the full path to an existing disk.
             For example:
             "projects/my-project/zones/us-central1-c/disks/my-disk".
-        mode (google.cloud.tpu_v2alpha1.types.AttachedDisk.DiskMode):
+        mode (google.cloud.tpu_v2.types.AttachedDisk.DiskMode):
             The mode in which to attach this disk. If not specified, the
             default is READ_WRITE mode. Only applicable to data_disks.
     """
@@ -197,7 +186,7 @@ class NetworkEndpoint(proto.Message):
             endpoint.
         port (int):
             The port of this network endpoint.
-        access_config (google.cloud.tpu_v2alpha1.types.AccessConfig):
+        access_config (google.cloud.tpu_v2.types.AccessConfig):
             The access config for the TPU worker.
     """
 
@@ -309,9 +298,9 @@ class Node(proto.Message):
             The user-supplied description of the TPU.
             Maximum of 512 characters.
         accelerator_type (str):
-            The type of hardware accelerators associated
-            with this node.
-        state (google.cloud.tpu_v2alpha1.types.Node.State):
+            Required. The type of hardware accelerators
+            associated with this node.
+        state (google.cloud.tpu_v2.types.Node.State):
             Output only. The current state for the TPU
             Node.
         health_description (str):
@@ -321,7 +310,7 @@ class Node(proto.Message):
         runtime_version (str):
             Required. The runtime version running in the
             Node.
-        network_config (google.cloud.tpu_v2alpha1.types.NetworkConfig):
+        network_config (google.cloud.tpu_v2.types.NetworkConfig):
             Network configurations for the TPU node.
         cidr_block (str):
             The CIDR block that the TPU node will use
@@ -335,7 +324,7 @@ class Node(proto.Message):
             any subnetworks in the user's provided network,
             or the provided network is peered with another
             network that is using that CIDR block.
-        service_account (google.cloud.tpu_v2alpha1.types.ServiceAccount):
+        service_account (google.cloud.tpu_v2.types.ServiceAccount):
             The Google Cloud Platform Service Account to
             be used by the TPU node VMs. If None is
             specified, the default compute service account
@@ -343,14 +332,14 @@ class Node(proto.Message):
         create_time (google.protobuf.timestamp_pb2.Timestamp):
             Output only. The time when the node was
             created.
-        scheduling_config (google.cloud.tpu_v2alpha1.types.SchedulingConfig):
+        scheduling_config (google.cloud.tpu_v2.types.SchedulingConfig):
             The scheduling options for this node.
-        network_endpoints (MutableSequence[google.cloud.tpu_v2alpha1.types.NetworkEndpoint]):
+        network_endpoints (MutableSequence[google.cloud.tpu_v2.types.NetworkEndpoint]):
             Output only. The network endpoints where TPU
             workers can be accessed and sent work. It is
             recommended that runtime clients of the node
             reach out to the 0th entry in this map first.
-        health (google.cloud.tpu_v2alpha1.types.Node.Health):
+        health (google.cloud.tpu_v2.types.Node.Health):
             The health status of the TPU node.
         labels (MutableMapping[str, str]):
             Resource labels to represent user-provided
@@ -365,18 +354,15 @@ class Node(proto.Message):
         id (int):
             Output only. The unique identifier for the
             TPU Node.
-        data_disks (MutableSequence[google.cloud.tpu_v2alpha1.types.AttachedDisk]):
+        data_disks (MutableSequence[google.cloud.tpu_v2.types.AttachedDisk]):
             The additional data disks for the Node.
-        api_version (google.cloud.tpu_v2alpha1.types.Node.ApiVersion):
+        api_version (google.cloud.tpu_v2.types.Node.ApiVersion):
             Output only. The API version that created
             this Node.
-        symptoms (MutableSequence[google.cloud.tpu_v2alpha1.types.Symptom]):
+        symptoms (MutableSequence[google.cloud.tpu_v2.types.Symptom]):
             Output only. The Symptoms that have occurred
             to the TPU Node.
-        queued_resource (str):
-            Output only. The qualified name of the
-            QueuedResource that requested this Node.
-        shielded_instance_config (google.cloud.tpu_v2alpha1.types.ShieldedInstanceConfig):
+        shielded_instance_config (google.cloud.tpu_v2.types.ShieldedInstanceConfig):
             Shielded Instance options.
     """
 
@@ -416,6 +402,7 @@ class Node(proto.Message):
         V1_ALPHA1 = 1
         V1 = 2
         V2_ALPHA1 = 3
+        V2 = 4
 
     name: str = proto.Field(
         proto.STRING,
@@ -509,10 +496,6 @@ class Node(proto.Message):
         number=39,
         message="Symptom",
     )
-    queued_resource: str = proto.Field(
-        proto.STRING,
-        number=43,
-    )
     shielded_instance_config: "ShieldedInstanceConfig" = proto.Field(
         proto.MESSAGE,
         number=45,
@@ -520,374 +503,8 @@ class Node(proto.Message):
     )
 
 
-class QueuedResource(proto.Message):
-    r"""A QueuedResource represents a request for resources that will
-    be placed in a queue and fulfilled when the necessary resources
-    are available.
-
-    This message has `oneof`_ fields (mutually exclusive fields).
-    For each oneof, at most one member field can be set at the same time.
-    Setting any member of the oneof automatically clears all other
-    members.
-
-    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
-
-    Attributes:
-        name (str):
-            Output only. Immutable. The name of the
-            QueuedResource.
-        tpu (google.cloud.tpu_v2alpha1.types.QueuedResource.Tpu):
-            Defines a TPU resource.
-
-            This field is a member of `oneof`_ ``resource``.
-        best_effort (google.cloud.tpu_v2alpha1.types.QueuedResource.BestEffort):
-            The BestEffort tier.
-
-            This field is a member of `oneof`_ ``tier``.
-        guaranteed (google.cloud.tpu_v2alpha1.types.QueuedResource.Guaranteed):
-            The Guaranteed tier
-
-            This field is a member of `oneof`_ ``tier``.
-        queueing_policy (google.cloud.tpu_v2alpha1.types.QueuedResource.QueueingPolicy):
-            The queueing policy of the QueuedRequest.
-        state (google.cloud.tpu_v2alpha1.types.QueuedResourceState):
-            Output only. State of the QueuedResource
-            request
-    """
-
-    class Tpu(proto.Message):
-        r"""Details of the TPU resource(s) being requested.
-
-        Attributes:
-            node_spec (MutableSequence[google.cloud.tpu_v2alpha1.types.QueuedResource.Tpu.NodeSpec]):
-                The TPU node(s) being requested.
-        """
-
-        class NodeSpec(proto.Message):
-            r"""Details of the TPU node(s) being requested. Users can request
-            either a single node or multiple nodes.
-            NodeSpec provides the specification for node(s) to be created.
-
-            Attributes:
-                parent (str):
-                    Required. The parent resource name.
-                node_id (str):
-                    The unqualified resource name. Should follow the
-                    ^[A-Za-z0-9_.~+%-]+$ regex format. This is only specified
-                    when requesting a single node. In case of multi-node
-                    requests, multi_node_params must be populated instead. It's
-                    an error to specify both node_id and multi_node_params.
-                node (google.cloud.tpu_v2alpha1.types.Node):
-                    Required. The node.
-            """
-
-            parent: str = proto.Field(
-                proto.STRING,
-                number=1,
-            )
-            node_id: str = proto.Field(
-                proto.STRING,
-                number=2,
-            )
-            node: "Node" = proto.Field(
-                proto.MESSAGE,
-                number=3,
-                message="Node",
-            )
-
-        node_spec: MutableSequence["QueuedResource.Tpu.NodeSpec"] = proto.RepeatedField(
-            proto.MESSAGE,
-            number=1,
-            message="QueuedResource.Tpu.NodeSpec",
-        )
-
-    class BestEffort(proto.Message):
-        r"""BestEffort tier definition."""
-
-    class Guaranteed(proto.Message):
-        r"""Guaranteed tier definition.
-
-        Attributes:
-            min_duration (google.protobuf.duration_pb2.Duration):
-                Optional. Defines the minimum duration of the
-                guarantee. If specified, the requested resources
-                will only be provisioned if they can be
-                allocated for at least the given duration.
-            reserved (bool):
-                Optional. Specifies the request should be
-                scheduled on reserved capacity.
-        """
-
-        min_duration: duration_pb2.Duration = proto.Field(
-            proto.MESSAGE,
-            number=1,
-            message=duration_pb2.Duration,
-        )
-        reserved: bool = proto.Field(
-            proto.BOOL,
-            number=2,
-        )
-
-    class QueueingPolicy(proto.Message):
-        r"""Defines the policy of the QueuedRequest.
-
-        This message has `oneof`_ fields (mutually exclusive fields).
-        For each oneof, at most one member field can be set at the same time.
-        Setting any member of the oneof automatically clears all other
-        members.
-
-        .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
-
-        Attributes:
-            valid_until_duration (google.protobuf.duration_pb2.Duration):
-                A relative time after which resources should
-                not be created. If the request cannot be
-                fulfilled by this time the request will be
-                failed.
-
-                This field is a member of `oneof`_ ``start_timing_constraints``.
-            valid_until_time (google.protobuf.timestamp_pb2.Timestamp):
-                An absolute time after which resources should
-                not be created. If the request cannot be
-                fulfilled by this time the request will be
-                failed.
-
-                This field is a member of `oneof`_ ``start_timing_constraints``.
-            valid_after_duration (google.protobuf.duration_pb2.Duration):
-                A relative time after which resources may be
-                created.
-
-                This field is a member of `oneof`_ ``start_timing_constraints``.
-            valid_after_time (google.protobuf.timestamp_pb2.Timestamp):
-                An absolute time at which resources may be
-                created.
-
-                This field is a member of `oneof`_ ``start_timing_constraints``.
-            valid_interval (google.type.interval_pb2.Interval):
-                An absolute time interval within which
-                resources may be created.
-
-                This field is a member of `oneof`_ ``start_timing_constraints``.
-        """
-
-        valid_until_duration: duration_pb2.Duration = proto.Field(
-            proto.MESSAGE,
-            number=1,
-            oneof="start_timing_constraints",
-            message=duration_pb2.Duration,
-        )
-        valid_until_time: timestamp_pb2.Timestamp = proto.Field(
-            proto.MESSAGE,
-            number=2,
-            oneof="start_timing_constraints",
-            message=timestamp_pb2.Timestamp,
-        )
-        valid_after_duration: duration_pb2.Duration = proto.Field(
-            proto.MESSAGE,
-            number=3,
-            oneof="start_timing_constraints",
-            message=duration_pb2.Duration,
-        )
-        valid_after_time: timestamp_pb2.Timestamp = proto.Field(
-            proto.MESSAGE,
-            number=4,
-            oneof="start_timing_constraints",
-            message=timestamp_pb2.Timestamp,
-        )
-        valid_interval: interval_pb2.Interval = proto.Field(
-            proto.MESSAGE,
-            number=5,
-            oneof="start_timing_constraints",
-            message=interval_pb2.Interval,
-        )
-
-    name: str = proto.Field(
-        proto.STRING,
-        number=1,
-    )
-    tpu: Tpu = proto.Field(
-        proto.MESSAGE,
-        number=2,
-        oneof="resource",
-        message=Tpu,
-    )
-    best_effort: BestEffort = proto.Field(
-        proto.MESSAGE,
-        number=3,
-        oneof="tier",
-        message=BestEffort,
-    )
-    guaranteed: Guaranteed = proto.Field(
-        proto.MESSAGE,
-        number=4,
-        oneof="tier",
-        message=Guaranteed,
-    )
-    queueing_policy: QueueingPolicy = proto.Field(
-        proto.MESSAGE,
-        number=5,
-        message=QueueingPolicy,
-    )
-    state: "QueuedResourceState" = proto.Field(
-        proto.MESSAGE,
-        number=6,
-        message="QueuedResourceState",
-    )
-
-
-class QueuedResourceState(proto.Message):
-    r"""QueuedResourceState defines the details of the QueuedResource
-    request.
-
-    This message has `oneof`_ fields (mutually exclusive fields).
-    For each oneof, at most one member field can be set at the same time.
-    Setting any member of the oneof automatically clears all other
-    members.
-
-    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
-
-    Attributes:
-        state (google.cloud.tpu_v2alpha1.types.QueuedResourceState.State):
-            State of the QueuedResource request.
-        creating_data (google.cloud.tpu_v2alpha1.types.QueuedResourceState.CreatingData):
-            Further data for the creating state.
-
-            This field is a member of `oneof`_ ``state_data``.
-        accepted_data (google.cloud.tpu_v2alpha1.types.QueuedResourceState.AcceptedData):
-            Further data for the accepted state.
-
-            This field is a member of `oneof`_ ``state_data``.
-        provisioning_data (google.cloud.tpu_v2alpha1.types.QueuedResourceState.ProvisioningData):
-            Further data for the provisioning state.
-
-            This field is a member of `oneof`_ ``state_data``.
-        failed_data (google.cloud.tpu_v2alpha1.types.QueuedResourceState.FailedData):
-            Further data for the failed state.
-
-            This field is a member of `oneof`_ ``state_data``.
-        deleting_data (google.cloud.tpu_v2alpha1.types.QueuedResourceState.DeletingData):
-            Further data for the deleting state.
-
-            This field is a member of `oneof`_ ``state_data``.
-        active_data (google.cloud.tpu_v2alpha1.types.QueuedResourceState.ActiveData):
-            Further data for the active state.
-
-            This field is a member of `oneof`_ ``state_data``.
-        suspending_data (google.cloud.tpu_v2alpha1.types.QueuedResourceState.SuspendingData):
-            Further data for the suspending state.
-
-            This field is a member of `oneof`_ ``state_data``.
-        suspended_data (google.cloud.tpu_v2alpha1.types.QueuedResourceState.SuspendedData):
-            Further data for the suspended state.
-
-            This field is a member of `oneof`_ ``state_data``.
-    """
-
-    class State(proto.Enum):
-        r"""Output only state of the request"""
-        STATE_UNSPECIFIED = 0
-        CREATING = 1
-        ACCEPTED = 2
-        PROVISIONING = 3
-        FAILED = 4
-        DELETING = 5
-        ACTIVE = 6
-        SUSPENDING = 7
-        SUSPENDED = 8
-
-    class CreatingData(proto.Message):
-        r"""Further data for the creating state."""
-
-    class AcceptedData(proto.Message):
-        r"""Further data for the accepted state."""
-
-    class ProvisioningData(proto.Message):
-        r"""Further data for the provisioning state."""
-
-    class FailedData(proto.Message):
-        r"""Further data for the failed state.
-
-        Attributes:
-            error (google.rpc.status_pb2.Status):
-                The error that caused the queued resource to
-                enter the FAILED state.
-        """
-
-        error: status_pb2.Status = proto.Field(
-            proto.MESSAGE,
-            number=1,
-            message=status_pb2.Status,
-        )
-
-    class DeletingData(proto.Message):
-        r"""Further data for the deleting state."""
-
-    class ActiveData(proto.Message):
-        r"""Further data for the active state."""
-
-    class SuspendingData(proto.Message):
-        r"""Further data for the suspending state."""
-
-    class SuspendedData(proto.Message):
-        r"""Further data for the suspended state."""
-
-    state: State = proto.Field(
-        proto.ENUM,
-        number=1,
-        enum=State,
-    )
-    creating_data: CreatingData = proto.Field(
-        proto.MESSAGE,
-        number=2,
-        oneof="state_data",
-        message=CreatingData,
-    )
-    accepted_data: AcceptedData = proto.Field(
-        proto.MESSAGE,
-        number=3,
-        oneof="state_data",
-        message=AcceptedData,
-    )
-    provisioning_data: ProvisioningData = proto.Field(
-        proto.MESSAGE,
-        number=4,
-        oneof="state_data",
-        message=ProvisioningData,
-    )
-    failed_data: FailedData = proto.Field(
-        proto.MESSAGE,
-        number=5,
-        oneof="state_data",
-        message=FailedData,
-    )
-    deleting_data: DeletingData = proto.Field(
-        proto.MESSAGE,
-        number=6,
-        oneof="state_data",
-        message=DeletingData,
-    )
-    active_data: ActiveData = proto.Field(
-        proto.MESSAGE,
-        number=7,
-        oneof="state_data",
-        message=ActiveData,
-    )
-    suspending_data: SuspendingData = proto.Field(
-        proto.MESSAGE,
-        number=8,
-        oneof="state_data",
-        message=SuspendingData,
-    )
-    suspended_data: SuspendedData = proto.Field(
-        proto.MESSAGE,
-        number=9,
-        oneof="state_data",
-        message=SuspendedData,
-    )
-
-
 class ListNodesRequest(proto.Message):
-    r"""Request for [ListNodes][google.cloud.tpu.v2alpha1.Tpu.ListNodes].
+    r"""Request for [ListNodes][google.cloud.tpu.v2.Tpu.ListNodes].
 
     Attributes:
         parent (str):
@@ -914,10 +531,10 @@ class ListNodesRequest(proto.Message):
 
 
 class ListNodesResponse(proto.Message):
-    r"""Response for [ListNodes][google.cloud.tpu.v2alpha1.Tpu.ListNodes].
+    r"""Response for [ListNodes][google.cloud.tpu.v2.Tpu.ListNodes].
 
     Attributes:
-        nodes (MutableSequence[google.cloud.tpu_v2alpha1.types.Node]):
+        nodes (MutableSequence[google.cloud.tpu_v2.types.Node]):
             The listed nodes.
         next_page_token (str):
             The next page token or empty if none.
@@ -945,7 +562,7 @@ class ListNodesResponse(proto.Message):
 
 
 class GetNodeRequest(proto.Message):
-    r"""Request for [GetNode][google.cloud.tpu.v2alpha1.Tpu.GetNode].
+    r"""Request for [GetNode][google.cloud.tpu.v2.Tpu.GetNode].
 
     Attributes:
         name (str):
@@ -959,17 +576,15 @@ class GetNodeRequest(proto.Message):
 
 
 class CreateNodeRequest(proto.Message):
-    r"""Request for [CreateNode][google.cloud.tpu.v2alpha1.Tpu.CreateNode].
+    r"""Request for [CreateNode][google.cloud.tpu.v2.Tpu.CreateNode].
 
     Attributes:
         parent (str):
             Required. The parent resource name.
         node_id (str):
             The unqualified resource name.
-        node (google.cloud.tpu_v2alpha1.types.Node):
+        node (google.cloud.tpu_v2.types.Node):
             Required. The node.
-        request_id (str):
-            Idempotent request UUID.
     """
 
     parent: str = proto.Field(
@@ -985,34 +600,24 @@ class CreateNodeRequest(proto.Message):
         number=3,
         message="Node",
     )
-    request_id: str = proto.Field(
-        proto.STRING,
-        number=6,
-    )
 
 
 class DeleteNodeRequest(proto.Message):
-    r"""Request for [DeleteNode][google.cloud.tpu.v2alpha1.Tpu.DeleteNode].
+    r"""Request for [DeleteNode][google.cloud.tpu.v2.Tpu.DeleteNode].
 
     Attributes:
         name (str):
             Required. The resource name.
-        request_id (str):
-            Idempotent request UUID.
     """
 
     name: str = proto.Field(
         proto.STRING,
         number=1,
     )
-    request_id: str = proto.Field(
-        proto.STRING,
-        number=3,
-    )
 
 
 class StopNodeRequest(proto.Message):
-    r"""Request for [StopNode][google.cloud.tpu.v2alpha1.Tpu.StopNode].
+    r"""Request for [StopNode][google.cloud.tpu.v2.Tpu.StopNode].
 
     Attributes:
         name (str):
@@ -1026,7 +631,7 @@ class StopNodeRequest(proto.Message):
 
 
 class StartNodeRequest(proto.Message):
-    r"""Request for [StartNode][google.cloud.tpu.v2alpha1.Tpu.StartNode].
+    r"""Request for [StartNode][google.cloud.tpu.v2.Tpu.StartNode].
 
     Attributes:
         name (str):
@@ -1040,14 +645,14 @@ class StartNodeRequest(proto.Message):
 
 
 class UpdateNodeRequest(proto.Message):
-    r"""Request for [UpdateNode][google.cloud.tpu.v2alpha1.Tpu.UpdateNode].
+    r"""Request for [UpdateNode][google.cloud.tpu.v2.Tpu.UpdateNode].
 
     Attributes:
         update_mask (google.protobuf.field_mask_pb2.FieldMask):
             Required. Mask of fields from [Node][Tpu.Node] to update.
             Supported fields: [description, tags, labels, metadata,
             network_config.enable_external_ips].
-        node (google.cloud.tpu_v2alpha1.types.Node):
+        node (google.cloud.tpu_v2.types.Node):
             Required. The node. Only fields specified in update_mask are
             updated.
     """
@@ -1061,137 +666,6 @@ class UpdateNodeRequest(proto.Message):
         proto.MESSAGE,
         number=2,
         message="Node",
-    )
-
-
-class ListQueuedResourcesRequest(proto.Message):
-    r"""Request for
-    [ListQueuedResources][google.cloud.tpu.v2alpha1.Tpu.ListQueuedResources].
-
-    Attributes:
-        parent (str):
-            Required. The parent resource name.
-        page_size (int):
-            The maximum number of items to return.
-        page_token (str):
-            The next_page_token value returned from a previous List
-            request, if any.
-    """
-
-    parent: str = proto.Field(
-        proto.STRING,
-        number=1,
-    )
-    page_size: int = proto.Field(
-        proto.INT32,
-        number=2,
-    )
-    page_token: str = proto.Field(
-        proto.STRING,
-        number=3,
-    )
-
-
-class ListQueuedResourcesResponse(proto.Message):
-    r"""Response for
-    [ListQueuedResources][google.cloud.tpu.v2alpha1.Tpu.ListQueuedResources].
-
-    Attributes:
-        queued_resources (MutableSequence[google.cloud.tpu_v2alpha1.types.QueuedResource]):
-            The listed queued resources.
-        next_page_token (str):
-            The next page token or empty if none.
-        unreachable (MutableSequence[str]):
-            Locations that could not be reached.
-    """
-
-    @property
-    def raw_page(self):
-        return self
-
-    queued_resources: MutableSequence["QueuedResource"] = proto.RepeatedField(
-        proto.MESSAGE,
-        number=1,
-        message="QueuedResource",
-    )
-    next_page_token: str = proto.Field(
-        proto.STRING,
-        number=2,
-    )
-    unreachable: MutableSequence[str] = proto.RepeatedField(
-        proto.STRING,
-        number=3,
-    )
-
-
-class GetQueuedResourceRequest(proto.Message):
-    r"""Request for
-    [GetQueuedResource][google.cloud.tpu.v2alpha1.Tpu.GetQueuedResource]
-
-    Attributes:
-        name (str):
-            Required. The resource name.
-    """
-
-    name: str = proto.Field(
-        proto.STRING,
-        number=1,
-    )
-
-
-class CreateQueuedResourceRequest(proto.Message):
-    r"""Request for
-    [CreateQueuedResource][google.cloud.tpu.v2alpha1.Tpu.CreateQueuedResource].
-
-    Attributes:
-        parent (str):
-            Required. The parent resource name.
-        queued_resource_id (str):
-            The unqualified resource name. Should follow the
-            ^[A-Za-z0-9_.~+%-]+$ regex format.
-        queued_resource (google.cloud.tpu_v2alpha1.types.QueuedResource):
-            Required. The queued resource.
-        request_id (str):
-            Idempotent request UUID.
-    """
-
-    parent: str = proto.Field(
-        proto.STRING,
-        number=1,
-    )
-    queued_resource_id: str = proto.Field(
-        proto.STRING,
-        number=2,
-    )
-    queued_resource: "QueuedResource" = proto.Field(
-        proto.MESSAGE,
-        number=3,
-        message="QueuedResource",
-    )
-    request_id: str = proto.Field(
-        proto.STRING,
-        number=4,
-    )
-
-
-class DeleteQueuedResourceRequest(proto.Message):
-    r"""Request for
-    [DeleteQueuedResource][google.cloud.tpu.v2alpha1.Tpu.DeleteQueuedResource].
-
-    Attributes:
-        name (str):
-            Required. The resource name.
-        request_id (str):
-            Idempotent request UUID.
-    """
-
-    name: str = proto.Field(
-        proto.STRING,
-        number=1,
-    )
-    request_id: str = proto.Field(
-        proto.STRING,
-        number=2,
     )
 
 
@@ -1212,7 +686,7 @@ class ServiceIdentity(proto.Message):
 
 class GenerateServiceIdentityRequest(proto.Message):
     r"""Request for
-    [GenerateServiceIdentity][google.cloud.tpu.v2alpha1.Tpu.GenerateServiceIdentity].
+    [GenerateServiceIdentity][google.cloud.tpu.v2.Tpu.GenerateServiceIdentity].
 
     Attributes:
         parent (str):
@@ -1227,10 +701,10 @@ class GenerateServiceIdentityRequest(proto.Message):
 
 class GenerateServiceIdentityResponse(proto.Message):
     r"""Response for
-    [GenerateServiceIdentity][google.cloud.tpu.v2alpha1.Tpu.GenerateServiceIdentity].
+    [GenerateServiceIdentity][google.cloud.tpu.v2.Tpu.GenerateServiceIdentity].
 
     Attributes:
-        identity (google.cloud.tpu_v2alpha1.types.ServiceIdentity):
+        identity (google.cloud.tpu_v2.types.ServiceIdentity):
             ServiceIdentity that was created or
             retrieved.
     """
@@ -1249,7 +723,7 @@ class AcceleratorType(proto.Message):
         name (str):
             The resource name.
         type_ (str):
-            The accelerator type.
+            the accelerator type.
     """
 
     name: str = proto.Field(
@@ -1264,7 +738,7 @@ class AcceleratorType(proto.Message):
 
 class GetAcceleratorTypeRequest(proto.Message):
     r"""Request for
-    [GetAcceleratorType][google.cloud.tpu.v2alpha1.Tpu.GetAcceleratorType].
+    [GetAcceleratorType][google.cloud.tpu.v2.Tpu.GetAcceleratorType].
 
     Attributes:
         name (str):
@@ -1279,7 +753,7 @@ class GetAcceleratorTypeRequest(proto.Message):
 
 class ListAcceleratorTypesRequest(proto.Message):
     r"""Request for
-    [ListAcceleratorTypes][google.cloud.tpu.v2alpha1.Tpu.ListAcceleratorTypes].
+    [ListAcceleratorTypes][google.cloud.tpu.v2.Tpu.ListAcceleratorTypes].
 
     Attributes:
         parent (str):
@@ -1319,10 +793,10 @@ class ListAcceleratorTypesRequest(proto.Message):
 
 class ListAcceleratorTypesResponse(proto.Message):
     r"""Response for
-    [ListAcceleratorTypes][google.cloud.tpu.v2alpha1.Tpu.ListAcceleratorTypes].
+    [ListAcceleratorTypes][google.cloud.tpu.v2.Tpu.ListAcceleratorTypes].
 
     Attributes:
-        accelerator_types (MutableSequence[google.cloud.tpu_v2alpha1.types.AcceleratorType]):
+        accelerator_types (MutableSequence[google.cloud.tpu_v2.types.AcceleratorType]):
             The listed nodes.
         next_page_token (str):
             The next page token or empty if none.
@@ -1371,7 +845,7 @@ class RuntimeVersion(proto.Message):
 
 class GetRuntimeVersionRequest(proto.Message):
     r"""Request for
-    [GetRuntimeVersion][google.cloud.tpu.v2alpha1.Tpu.GetRuntimeVersion].
+    [GetRuntimeVersion][google.cloud.tpu.v2.Tpu.GetRuntimeVersion].
 
     Attributes:
         name (str):
@@ -1386,7 +860,7 @@ class GetRuntimeVersionRequest(proto.Message):
 
 class ListRuntimeVersionsRequest(proto.Message):
     r"""Request for
-    [ListRuntimeVersions][google.cloud.tpu.v2alpha1.Tpu.ListRuntimeVersions].
+    [ListRuntimeVersions][google.cloud.tpu.v2.Tpu.ListRuntimeVersions].
 
     Attributes:
         parent (str):
@@ -1426,10 +900,10 @@ class ListRuntimeVersionsRequest(proto.Message):
 
 class ListRuntimeVersionsResponse(proto.Message):
     r"""Response for
-    [ListRuntimeVersions][google.cloud.tpu.v2alpha1.Tpu.ListRuntimeVersions].
+    [ListRuntimeVersions][google.cloud.tpu.v2.Tpu.ListRuntimeVersions].
 
     Attributes:
-        runtime_versions (MutableSequence[google.cloud.tpu_v2alpha1.types.RuntimeVersion]):
+        runtime_versions (MutableSequence[google.cloud.tpu_v2.types.RuntimeVersion]):
             The listed nodes.
         next_page_token (str):
             The next page token or empty if none.
@@ -1517,7 +991,7 @@ class Symptom(proto.Message):
     Attributes:
         create_time (google.protobuf.timestamp_pb2.Timestamp):
             Timestamp when the Symptom is created.
-        symptom_type (google.cloud.tpu_v2alpha1.types.Symptom.SymptomType):
+        symptom_type (google.cloud.tpu_v2.types.Symptom.SymptomType):
             Type of the Symptom.
         details (str):
             Detailed information of the current Symptom.
@@ -1560,7 +1034,7 @@ class Symptom(proto.Message):
 
 class GetGuestAttributesRequest(proto.Message):
     r"""Request for
-    [GetGuestAttributes][google.cloud.tpu.v2alpha1.Tpu.GetGuestAttributes].
+    [GetGuestAttributes][google.cloud.tpu.v2.Tpu.GetGuestAttributes].
 
     Attributes:
         name (str):
@@ -1588,10 +1062,10 @@ class GetGuestAttributesRequest(proto.Message):
 
 class GetGuestAttributesResponse(proto.Message):
     r"""Response for
-    [GetGuestAttributes][google.cloud.tpu.v2alpha1.Tpu.GetGuestAttributes].
+    [GetGuestAttributes][google.cloud.tpu.v2.Tpu.GetGuestAttributes].
 
     Attributes:
-        guest_attributes (MutableSequence[google.cloud.tpu_v2alpha1.types.GuestAttributes]):
+        guest_attributes (MutableSequence[google.cloud.tpu_v2.types.GuestAttributes]):
             The guest attributes for the TPU workers.
     """
 
@@ -1599,32 +1073,6 @@ class GetGuestAttributesResponse(proto.Message):
         proto.MESSAGE,
         number=1,
         message="GuestAttributes",
-    )
-
-
-class SimulateMaintenanceEventRequest(proto.Message):
-    r"""Request for
-    [SimulateMaintenanceEvent][google.cloud.tpu.v2alpha1.Tpu.SimulateMaintenanceEvent].
-
-    Attributes:
-        name (str):
-            Required. The resource name.
-        worker_ids (MutableSequence[str]):
-            The 0-based worker ID. If it is empty, worker
-            ID 0 will be selected for maintenance event
-            simulation. A maintenance event will only be
-            fired on the first specified worker ID. Future
-            implementations may support firing on multiple
-            workers.
-    """
-
-    name: str = proto.Field(
-        proto.STRING,
-        number=1,
-    )
-    worker_ids: MutableSequence[str] = proto.RepeatedField(
-        proto.STRING,
-        number=2,
     )
 
 

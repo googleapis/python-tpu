@@ -13,27 +13,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from typing import Awaitable, Callable, Dict, Optional, Sequence, Tuple, Union
+from typing import Callable, Dict, Optional, Sequence, Tuple, Union
 import warnings
 
-from google.api_core import gapic_v1, grpc_helpers_async, operations_v1
+from google.api_core import gapic_v1, grpc_helpers, operations_v1
+import google.auth  # type: ignore
 from google.auth import credentials as ga_credentials  # type: ignore
 from google.auth.transport.grpc import SslCredentials  # type: ignore
+from google.cloud.location import locations_pb2  # type: ignore
 from google.longrunning import operations_pb2  # type: ignore
 import grpc  # type: ignore
-from grpc.experimental import aio  # type: ignore
 
-from google.cloud.tpu_v2alpha1.types import cloud_tpu
+from google.cloud.tpu_v2.types import cloud_tpu
 
 from .base import DEFAULT_CLIENT_INFO, TpuTransport
-from .grpc import TpuGrpcTransport
 
 
-class TpuGrpcAsyncIOTransport(TpuTransport):
-    """gRPC AsyncIO backend transport for Tpu.
+class TpuGrpcTransport(TpuTransport):
+    """gRPC backend transport for Tpu.
 
     Manages TPU nodes and other resources
-    TPU API v2alpha1
+    TPU API v2
 
     This class defines the same methods as the primary client, so the
     primary client can load the underlying transport implementation
@@ -43,51 +43,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
     top of HTTP/2); the ``grpcio`` package must be installed.
     """
 
-    _grpc_channel: aio.Channel
-    _stubs: Dict[str, Callable] = {}
-
-    @classmethod
-    def create_channel(
-        cls,
-        host: str = "tpu.googleapis.com",
-        credentials: Optional[ga_credentials.Credentials] = None,
-        credentials_file: Optional[str] = None,
-        scopes: Optional[Sequence[str]] = None,
-        quota_project_id: Optional[str] = None,
-        **kwargs,
-    ) -> aio.Channel:
-        """Create and return a gRPC AsyncIO channel object.
-        Args:
-            host (Optional[str]): The host for the channel to use.
-            credentials (Optional[~.Credentials]): The
-                authorization credentials to attach to requests. These
-                credentials identify this application to the service. If
-                none are specified, the client will attempt to ascertain
-                the credentials from the environment.
-            credentials_file (Optional[str]): A file with credentials that can
-                be loaded with :func:`google.auth.load_credentials_from_file`.
-                This argument is ignored if ``channel`` is provided.
-            scopes (Optional[Sequence[str]]): A optional list of scopes needed for this
-                service. These are only used when credentials are not specified and
-                are passed to :func:`google.auth.default`.
-            quota_project_id (Optional[str]): An optional project to use for billing
-                and quota.
-            kwargs (Optional[dict]): Keyword arguments, which are passed to the
-                channel creation.
-        Returns:
-            aio.Channel: A gRPC AsyncIO channel object.
-        """
-
-        return grpc_helpers_async.create_channel(
-            host,
-            credentials=credentials,
-            credentials_file=credentials_file,
-            quota_project_id=quota_project_id,
-            default_scopes=cls.AUTH_SCOPES,
-            scopes=scopes,
-            default_host=cls.DEFAULT_HOST,
-            **kwargs,
-        )
+    _stubs: Dict[str, Callable]
 
     def __init__(
         self,
@@ -96,7 +52,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         credentials: Optional[ga_credentials.Credentials] = None,
         credentials_file: Optional[str] = None,
         scopes: Optional[Sequence[str]] = None,
-        channel: Optional[aio.Channel] = None,
+        channel: Optional[grpc.Channel] = None,
         api_mtls_endpoint: Optional[str] = None,
         client_cert_source: Optional[Callable[[], Tuple[bytes, bytes]]] = None,
         ssl_channel_credentials: Optional[grpc.ChannelCredentials] = None,
@@ -120,10 +76,9 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
             credentials_file (Optional[str]): A file with credentials that can
                 be loaded with :func:`google.auth.load_credentials_from_file`.
                 This argument is ignored if ``channel`` is provided.
-            scopes (Optional[Sequence[str]]): A optional list of scopes needed for this
-                service. These are only used when credentials are not specified and
-                are passed to :func:`google.auth.default`.
-            channel (Optional[aio.Channel]): A ``Channel`` instance through
+            scopes (Optional(Sequence[str])): A list of scopes. This argument is
+                ignored if ``channel`` is provided.
+            channel (Optional[grpc.Channel]): A ``Channel`` instance through
                 which to make calls.
             api_mtls_endpoint (Optional[str]): Deprecated. The mutual TLS endpoint.
                 If provided, it overrides the ``host`` argument and tries to create
@@ -150,7 +105,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
                 be used for service account credentials.
 
         Raises:
-            google.auth.exceptions.MutualTlsChannelError: If mutual TLS transport
+          google.auth.exceptions.MutualTLSChannelError: If mutual TLS transport
               creation failed for any reason.
           google.api_core.exceptions.DuplicateCredentialArgs: If both ``credentials``
               and ``credentials_file`` are passed.
@@ -158,7 +113,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         self._grpc_channel = None
         self._ssl_channel_credentials = ssl_channel_credentials
         self._stubs: Dict[str, Callable] = {}
-        self._operations_client: Optional[operations_v1.OperationsAsyncClient] = None
+        self._operations_client: Optional[operations_v1.OperationsClient] = None
 
         if api_mtls_endpoint:
             warnings.warn("api_mtls_endpoint is deprecated", DeprecationWarning)
@@ -171,6 +126,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
             # If a channel was explicitly provided, set it.
             self._grpc_channel = channel
             self._ssl_channel_credentials = None
+
         else:
             if api_mtls_endpoint:
                 host = api_mtls_endpoint
@@ -224,18 +180,60 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         # Wrap messages. This must be done after self._grpc_channel exists
         self._prep_wrapped_messages(client_info)
 
-    @property
-    def grpc_channel(self) -> aio.Channel:
-        """Create the channel designed to connect to this service.
+    @classmethod
+    def create_channel(
+        cls,
+        host: str = "tpu.googleapis.com",
+        credentials: Optional[ga_credentials.Credentials] = None,
+        credentials_file: Optional[str] = None,
+        scopes: Optional[Sequence[str]] = None,
+        quota_project_id: Optional[str] = None,
+        **kwargs,
+    ) -> grpc.Channel:
+        """Create and return a gRPC channel object.
+        Args:
+            host (Optional[str]): The host for the channel to use.
+            credentials (Optional[~.Credentials]): The
+                authorization credentials to attach to requests. These
+                credentials identify this application to the service. If
+                none are specified, the client will attempt to ascertain
+                the credentials from the environment.
+            credentials_file (Optional[str]): A file with credentials that can
+                be loaded with :func:`google.auth.load_credentials_from_file`.
+                This argument is mutually exclusive with credentials.
+            scopes (Optional[Sequence[str]]): A optional list of scopes needed for this
+                service. These are only used when credentials are not specified and
+                are passed to :func:`google.auth.default`.
+            quota_project_id (Optional[str]): An optional project to use for billing
+                and quota.
+            kwargs (Optional[dict]): Keyword arguments, which are passed to the
+                channel creation.
+        Returns:
+            grpc.Channel: A gRPC channel object.
 
-        This property caches on the instance; repeated calls return
-        the same channel.
+        Raises:
+            google.api_core.exceptions.DuplicateCredentialArgs: If both ``credentials``
+              and ``credentials_file`` are passed.
         """
-        # Return the channel from cache.
+
+        return grpc_helpers.create_channel(
+            host,
+            credentials=credentials,
+            credentials_file=credentials_file,
+            quota_project_id=quota_project_id,
+            default_scopes=cls.AUTH_SCOPES,
+            scopes=scopes,
+            default_host=cls.DEFAULT_HOST,
+            **kwargs,
+        )
+
+    @property
+    def grpc_channel(self) -> grpc.Channel:
+        """Return the channel designed to connect to this service."""
         return self._grpc_channel
 
     @property
-    def operations_client(self) -> operations_v1.OperationsAsyncClient:
+    def operations_client(self) -> operations_v1.OperationsClient:
         """Create the client designed to process long-running operations.
 
         This property caches on the instance; repeated calls return the same
@@ -243,9 +241,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         """
         # Quick check: Only create a new client if we do not already have one.
         if self._operations_client is None:
-            self._operations_client = operations_v1.OperationsAsyncClient(
-                self.grpc_channel
-            )
+            self._operations_client = operations_v1.OperationsClient(self.grpc_channel)
 
         # Return the client from cache.
         return self._operations_client
@@ -253,14 +249,14 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
     @property
     def list_nodes(
         self,
-    ) -> Callable[[cloud_tpu.ListNodesRequest], Awaitable[cloud_tpu.ListNodesResponse]]:
+    ) -> Callable[[cloud_tpu.ListNodesRequest], cloud_tpu.ListNodesResponse]:
         r"""Return a callable for the list nodes method over gRPC.
 
         Lists nodes.
 
         Returns:
             Callable[[~.ListNodesRequest],
-                    Awaitable[~.ListNodesResponse]]:
+                    ~.ListNodesResponse]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -270,23 +266,21 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         # to pass in the functions for each.
         if "list_nodes" not in self._stubs:
             self._stubs["list_nodes"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/ListNodes",
+                "/google.cloud.tpu.v2.Tpu/ListNodes",
                 request_serializer=cloud_tpu.ListNodesRequest.serialize,
                 response_deserializer=cloud_tpu.ListNodesResponse.deserialize,
             )
         return self._stubs["list_nodes"]
 
     @property
-    def get_node(
-        self,
-    ) -> Callable[[cloud_tpu.GetNodeRequest], Awaitable[cloud_tpu.Node]]:
+    def get_node(self) -> Callable[[cloud_tpu.GetNodeRequest], cloud_tpu.Node]:
         r"""Return a callable for the get node method over gRPC.
 
         Gets the details of a node.
 
         Returns:
             Callable[[~.GetNodeRequest],
-                    Awaitable[~.Node]]:
+                    ~.Node]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -296,7 +290,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         # to pass in the functions for each.
         if "get_node" not in self._stubs:
             self._stubs["get_node"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/GetNode",
+                "/google.cloud.tpu.v2.Tpu/GetNode",
                 request_serializer=cloud_tpu.GetNodeRequest.serialize,
                 response_deserializer=cloud_tpu.Node.deserialize,
             )
@@ -305,14 +299,14 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
     @property
     def create_node(
         self,
-    ) -> Callable[[cloud_tpu.CreateNodeRequest], Awaitable[operations_pb2.Operation]]:
+    ) -> Callable[[cloud_tpu.CreateNodeRequest], operations_pb2.Operation]:
         r"""Return a callable for the create node method over gRPC.
 
         Creates a node.
 
         Returns:
             Callable[[~.CreateNodeRequest],
-                    Awaitable[~.Operation]]:
+                    ~.Operation]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -322,7 +316,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         # to pass in the functions for each.
         if "create_node" not in self._stubs:
             self._stubs["create_node"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/CreateNode",
+                "/google.cloud.tpu.v2.Tpu/CreateNode",
                 request_serializer=cloud_tpu.CreateNodeRequest.serialize,
                 response_deserializer=operations_pb2.Operation.FromString,
             )
@@ -331,14 +325,14 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
     @property
     def delete_node(
         self,
-    ) -> Callable[[cloud_tpu.DeleteNodeRequest], Awaitable[operations_pb2.Operation]]:
+    ) -> Callable[[cloud_tpu.DeleteNodeRequest], operations_pb2.Operation]:
         r"""Return a callable for the delete node method over gRPC.
 
         Deletes a node.
 
         Returns:
             Callable[[~.DeleteNodeRequest],
-                    Awaitable[~.Operation]]:
+                    ~.Operation]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -348,7 +342,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         # to pass in the functions for each.
         if "delete_node" not in self._stubs:
             self._stubs["delete_node"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/DeleteNode",
+                "/google.cloud.tpu.v2.Tpu/DeleteNode",
                 request_serializer=cloud_tpu.DeleteNodeRequest.serialize,
                 response_deserializer=operations_pb2.Operation.FromString,
             )
@@ -357,7 +351,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
     @property
     def stop_node(
         self,
-    ) -> Callable[[cloud_tpu.StopNodeRequest], Awaitable[operations_pb2.Operation]]:
+    ) -> Callable[[cloud_tpu.StopNodeRequest], operations_pb2.Operation]:
         r"""Return a callable for the stop node method over gRPC.
 
         Stops a node. This operation is only available with
@@ -365,7 +359,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
 
         Returns:
             Callable[[~.StopNodeRequest],
-                    Awaitable[~.Operation]]:
+                    ~.Operation]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -375,7 +369,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         # to pass in the functions for each.
         if "stop_node" not in self._stubs:
             self._stubs["stop_node"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/StopNode",
+                "/google.cloud.tpu.v2.Tpu/StopNode",
                 request_serializer=cloud_tpu.StopNodeRequest.serialize,
                 response_deserializer=operations_pb2.Operation.FromString,
             )
@@ -384,14 +378,14 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
     @property
     def start_node(
         self,
-    ) -> Callable[[cloud_tpu.StartNodeRequest], Awaitable[operations_pb2.Operation]]:
+    ) -> Callable[[cloud_tpu.StartNodeRequest], operations_pb2.Operation]:
         r"""Return a callable for the start node method over gRPC.
 
         Starts a node.
 
         Returns:
             Callable[[~.StartNodeRequest],
-                    Awaitable[~.Operation]]:
+                    ~.Operation]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -401,7 +395,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         # to pass in the functions for each.
         if "start_node" not in self._stubs:
             self._stubs["start_node"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/StartNode",
+                "/google.cloud.tpu.v2.Tpu/StartNode",
                 request_serializer=cloud_tpu.StartNodeRequest.serialize,
                 response_deserializer=operations_pb2.Operation.FromString,
             )
@@ -410,14 +404,14 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
     @property
     def update_node(
         self,
-    ) -> Callable[[cloud_tpu.UpdateNodeRequest], Awaitable[operations_pb2.Operation]]:
+    ) -> Callable[[cloud_tpu.UpdateNodeRequest], operations_pb2.Operation]:
         r"""Return a callable for the update node method over gRPC.
 
         Updates the configurations of a node.
 
         Returns:
             Callable[[~.UpdateNodeRequest],
-                    Awaitable[~.Operation]]:
+                    ~.Operation]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -427,131 +421,18 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         # to pass in the functions for each.
         if "update_node" not in self._stubs:
             self._stubs["update_node"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/UpdateNode",
+                "/google.cloud.tpu.v2.Tpu/UpdateNode",
                 request_serializer=cloud_tpu.UpdateNodeRequest.serialize,
                 response_deserializer=operations_pb2.Operation.FromString,
             )
         return self._stubs["update_node"]
 
     @property
-    def list_queued_resources(
-        self,
-    ) -> Callable[
-        [cloud_tpu.ListQueuedResourcesRequest],
-        Awaitable[cloud_tpu.ListQueuedResourcesResponse],
-    ]:
-        r"""Return a callable for the list queued resources method over gRPC.
-
-        Lists queued resources.
-
-        Returns:
-            Callable[[~.ListQueuedResourcesRequest],
-                    Awaitable[~.ListQueuedResourcesResponse]]:
-                A function that, when called, will call the underlying RPC
-                on the server.
-        """
-        # Generate a "stub function" on-the-fly which will actually make
-        # the request.
-        # gRPC handles serialization and deserialization, so we just need
-        # to pass in the functions for each.
-        if "list_queued_resources" not in self._stubs:
-            self._stubs["list_queued_resources"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/ListQueuedResources",
-                request_serializer=cloud_tpu.ListQueuedResourcesRequest.serialize,
-                response_deserializer=cloud_tpu.ListQueuedResourcesResponse.deserialize,
-            )
-        return self._stubs["list_queued_resources"]
-
-    @property
-    def get_queued_resource(
-        self,
-    ) -> Callable[
-        [cloud_tpu.GetQueuedResourceRequest], Awaitable[cloud_tpu.QueuedResource]
-    ]:
-        r"""Return a callable for the get queued resource method over gRPC.
-
-        Gets details of a queued resource.
-
-        Returns:
-            Callable[[~.GetQueuedResourceRequest],
-                    Awaitable[~.QueuedResource]]:
-                A function that, when called, will call the underlying RPC
-                on the server.
-        """
-        # Generate a "stub function" on-the-fly which will actually make
-        # the request.
-        # gRPC handles serialization and deserialization, so we just need
-        # to pass in the functions for each.
-        if "get_queued_resource" not in self._stubs:
-            self._stubs["get_queued_resource"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/GetQueuedResource",
-                request_serializer=cloud_tpu.GetQueuedResourceRequest.serialize,
-                response_deserializer=cloud_tpu.QueuedResource.deserialize,
-            )
-        return self._stubs["get_queued_resource"]
-
-    @property
-    def create_queued_resource(
-        self,
-    ) -> Callable[
-        [cloud_tpu.CreateQueuedResourceRequest], Awaitable[operations_pb2.Operation]
-    ]:
-        r"""Return a callable for the create queued resource method over gRPC.
-
-        Creates a QueuedResource TPU instance.
-
-        Returns:
-            Callable[[~.CreateQueuedResourceRequest],
-                    Awaitable[~.Operation]]:
-                A function that, when called, will call the underlying RPC
-                on the server.
-        """
-        # Generate a "stub function" on-the-fly which will actually make
-        # the request.
-        # gRPC handles serialization and deserialization, so we just need
-        # to pass in the functions for each.
-        if "create_queued_resource" not in self._stubs:
-            self._stubs["create_queued_resource"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/CreateQueuedResource",
-                request_serializer=cloud_tpu.CreateQueuedResourceRequest.serialize,
-                response_deserializer=operations_pb2.Operation.FromString,
-            )
-        return self._stubs["create_queued_resource"]
-
-    @property
-    def delete_queued_resource(
-        self,
-    ) -> Callable[
-        [cloud_tpu.DeleteQueuedResourceRequest], Awaitable[operations_pb2.Operation]
-    ]:
-        r"""Return a callable for the delete queued resource method over gRPC.
-
-        Deletes a QueuedResource TPU instance.
-
-        Returns:
-            Callable[[~.DeleteQueuedResourceRequest],
-                    Awaitable[~.Operation]]:
-                A function that, when called, will call the underlying RPC
-                on the server.
-        """
-        # Generate a "stub function" on-the-fly which will actually make
-        # the request.
-        # gRPC handles serialization and deserialization, so we just need
-        # to pass in the functions for each.
-        if "delete_queued_resource" not in self._stubs:
-            self._stubs["delete_queued_resource"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/DeleteQueuedResource",
-                request_serializer=cloud_tpu.DeleteQueuedResourceRequest.serialize,
-                response_deserializer=operations_pb2.Operation.FromString,
-            )
-        return self._stubs["delete_queued_resource"]
-
-    @property
     def generate_service_identity(
         self,
     ) -> Callable[
         [cloud_tpu.GenerateServiceIdentityRequest],
-        Awaitable[cloud_tpu.GenerateServiceIdentityResponse],
+        cloud_tpu.GenerateServiceIdentityResponse,
     ]:
         r"""Return a callable for the generate service identity method over gRPC.
 
@@ -560,7 +441,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
 
         Returns:
             Callable[[~.GenerateServiceIdentityRequest],
-                    Awaitable[~.GenerateServiceIdentityResponse]]:
+                    ~.GenerateServiceIdentityResponse]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -570,7 +451,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         # to pass in the functions for each.
         if "generate_service_identity" not in self._stubs:
             self._stubs["generate_service_identity"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/GenerateServiceIdentity",
+                "/google.cloud.tpu.v2.Tpu/GenerateServiceIdentity",
                 request_serializer=cloud_tpu.GenerateServiceIdentityRequest.serialize,
                 response_deserializer=cloud_tpu.GenerateServiceIdentityResponse.deserialize,
             )
@@ -580,8 +461,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
     def list_accelerator_types(
         self,
     ) -> Callable[
-        [cloud_tpu.ListAcceleratorTypesRequest],
-        Awaitable[cloud_tpu.ListAcceleratorTypesResponse],
+        [cloud_tpu.ListAcceleratorTypesRequest], cloud_tpu.ListAcceleratorTypesResponse
     ]:
         r"""Return a callable for the list accelerator types method over gRPC.
 
@@ -589,7 +469,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
 
         Returns:
             Callable[[~.ListAcceleratorTypesRequest],
-                    Awaitable[~.ListAcceleratorTypesResponse]]:
+                    ~.ListAcceleratorTypesResponse]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -599,7 +479,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         # to pass in the functions for each.
         if "list_accelerator_types" not in self._stubs:
             self._stubs["list_accelerator_types"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/ListAcceleratorTypes",
+                "/google.cloud.tpu.v2.Tpu/ListAcceleratorTypes",
                 request_serializer=cloud_tpu.ListAcceleratorTypesRequest.serialize,
                 response_deserializer=cloud_tpu.ListAcceleratorTypesResponse.deserialize,
             )
@@ -608,16 +488,14 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
     @property
     def get_accelerator_type(
         self,
-    ) -> Callable[
-        [cloud_tpu.GetAcceleratorTypeRequest], Awaitable[cloud_tpu.AcceleratorType]
-    ]:
+    ) -> Callable[[cloud_tpu.GetAcceleratorTypeRequest], cloud_tpu.AcceleratorType]:
         r"""Return a callable for the get accelerator type method over gRPC.
 
         Gets AcceleratorType.
 
         Returns:
             Callable[[~.GetAcceleratorTypeRequest],
-                    Awaitable[~.AcceleratorType]]:
+                    ~.AcceleratorType]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -627,7 +505,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         # to pass in the functions for each.
         if "get_accelerator_type" not in self._stubs:
             self._stubs["get_accelerator_type"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/GetAcceleratorType",
+                "/google.cloud.tpu.v2.Tpu/GetAcceleratorType",
                 request_serializer=cloud_tpu.GetAcceleratorTypeRequest.serialize,
                 response_deserializer=cloud_tpu.AcceleratorType.deserialize,
             )
@@ -637,8 +515,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
     def list_runtime_versions(
         self,
     ) -> Callable[
-        [cloud_tpu.ListRuntimeVersionsRequest],
-        Awaitable[cloud_tpu.ListRuntimeVersionsResponse],
+        [cloud_tpu.ListRuntimeVersionsRequest], cloud_tpu.ListRuntimeVersionsResponse
     ]:
         r"""Return a callable for the list runtime versions method over gRPC.
 
@@ -646,7 +523,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
 
         Returns:
             Callable[[~.ListRuntimeVersionsRequest],
-                    Awaitable[~.ListRuntimeVersionsResponse]]:
+                    ~.ListRuntimeVersionsResponse]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -656,7 +533,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         # to pass in the functions for each.
         if "list_runtime_versions" not in self._stubs:
             self._stubs["list_runtime_versions"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/ListRuntimeVersions",
+                "/google.cloud.tpu.v2.Tpu/ListRuntimeVersions",
                 request_serializer=cloud_tpu.ListRuntimeVersionsRequest.serialize,
                 response_deserializer=cloud_tpu.ListRuntimeVersionsResponse.deserialize,
             )
@@ -665,16 +542,14 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
     @property
     def get_runtime_version(
         self,
-    ) -> Callable[
-        [cloud_tpu.GetRuntimeVersionRequest], Awaitable[cloud_tpu.RuntimeVersion]
-    ]:
+    ) -> Callable[[cloud_tpu.GetRuntimeVersionRequest], cloud_tpu.RuntimeVersion]:
         r"""Return a callable for the get runtime version method over gRPC.
 
         Gets a runtime version.
 
         Returns:
             Callable[[~.GetRuntimeVersionRequest],
-                    Awaitable[~.RuntimeVersion]]:
+                    ~.RuntimeVersion]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -684,7 +559,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         # to pass in the functions for each.
         if "get_runtime_version" not in self._stubs:
             self._stubs["get_runtime_version"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/GetRuntimeVersion",
+                "/google.cloud.tpu.v2.Tpu/GetRuntimeVersion",
                 request_serializer=cloud_tpu.GetRuntimeVersionRequest.serialize,
                 response_deserializer=cloud_tpu.RuntimeVersion.deserialize,
             )
@@ -694,8 +569,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
     def get_guest_attributes(
         self,
     ) -> Callable[
-        [cloud_tpu.GetGuestAttributesRequest],
-        Awaitable[cloud_tpu.GetGuestAttributesResponse],
+        [cloud_tpu.GetGuestAttributesRequest], cloud_tpu.GetGuestAttributesResponse
     ]:
         r"""Return a callable for the get guest attributes method over gRPC.
 
@@ -703,7 +577,7 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
 
         Returns:
             Callable[[~.GetGuestAttributesRequest],
-                    Awaitable[~.GetGuestAttributesResponse]]:
+                    ~.GetGuestAttributesResponse]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -713,42 +587,124 @@ class TpuGrpcAsyncIOTransport(TpuTransport):
         # to pass in the functions for each.
         if "get_guest_attributes" not in self._stubs:
             self._stubs["get_guest_attributes"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/GetGuestAttributes",
+                "/google.cloud.tpu.v2.Tpu/GetGuestAttributes",
                 request_serializer=cloud_tpu.GetGuestAttributesRequest.serialize,
                 response_deserializer=cloud_tpu.GetGuestAttributesResponse.deserialize,
             )
         return self._stubs["get_guest_attributes"]
 
+    def close(self):
+        self.grpc_channel.close()
+
     @property
-    def simulate_maintenance_event(
+    def delete_operation(
         self,
-    ) -> Callable[
-        [cloud_tpu.SimulateMaintenanceEventRequest], Awaitable[operations_pb2.Operation]
-    ]:
-        r"""Return a callable for the simulate maintenance event method over gRPC.
-
-        Simulates a maintenance event.
-
-        Returns:
-            Callable[[~.SimulateMaintenanceEventRequest],
-                    Awaitable[~.Operation]]:
-                A function that, when called, will call the underlying RPC
-                on the server.
-        """
+    ) -> Callable[[operations_pb2.DeleteOperationRequest], None]:
+        r"""Return a callable for the delete_operation method over gRPC."""
         # Generate a "stub function" on-the-fly which will actually make
         # the request.
         # gRPC handles serialization and deserialization, so we just need
         # to pass in the functions for each.
-        if "simulate_maintenance_event" not in self._stubs:
-            self._stubs["simulate_maintenance_event"] = self.grpc_channel.unary_unary(
-                "/google.cloud.tpu.v2alpha1.Tpu/SimulateMaintenanceEvent",
-                request_serializer=cloud_tpu.SimulateMaintenanceEventRequest.serialize,
+        if "delete_operation" not in self._stubs:
+            self._stubs["delete_operation"] = self.grpc_channel.unary_unary(
+                "/google.longrunning.Operations/DeleteOperation",
+                request_serializer=operations_pb2.DeleteOperationRequest.SerializeToString,
+                response_deserializer=None,
+            )
+        return self._stubs["delete_operation"]
+
+    @property
+    def cancel_operation(
+        self,
+    ) -> Callable[[operations_pb2.CancelOperationRequest], None]:
+        r"""Return a callable for the cancel_operation method over gRPC."""
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "cancel_operation" not in self._stubs:
+            self._stubs["cancel_operation"] = self.grpc_channel.unary_unary(
+                "/google.longrunning.Operations/CancelOperation",
+                request_serializer=operations_pb2.CancelOperationRequest.SerializeToString,
+                response_deserializer=None,
+            )
+        return self._stubs["cancel_operation"]
+
+    @property
+    def get_operation(
+        self,
+    ) -> Callable[[operations_pb2.GetOperationRequest], operations_pb2.Operation]:
+        r"""Return a callable for the get_operation method over gRPC."""
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "get_operation" not in self._stubs:
+            self._stubs["get_operation"] = self.grpc_channel.unary_unary(
+                "/google.longrunning.Operations/GetOperation",
+                request_serializer=operations_pb2.GetOperationRequest.SerializeToString,
                 response_deserializer=operations_pb2.Operation.FromString,
             )
-        return self._stubs["simulate_maintenance_event"]
+        return self._stubs["get_operation"]
 
-    def close(self):
-        return self.grpc_channel.close()
+    @property
+    def list_operations(
+        self,
+    ) -> Callable[
+        [operations_pb2.ListOperationsRequest], operations_pb2.ListOperationsResponse
+    ]:
+        r"""Return a callable for the list_operations method over gRPC."""
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "list_operations" not in self._stubs:
+            self._stubs["list_operations"] = self.grpc_channel.unary_unary(
+                "/google.longrunning.Operations/ListOperations",
+                request_serializer=operations_pb2.ListOperationsRequest.SerializeToString,
+                response_deserializer=operations_pb2.ListOperationsResponse.FromString,
+            )
+        return self._stubs["list_operations"]
+
+    @property
+    def list_locations(
+        self,
+    ) -> Callable[
+        [locations_pb2.ListLocationsRequest], locations_pb2.ListLocationsResponse
+    ]:
+        r"""Return a callable for the list locations method over gRPC."""
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "list_locations" not in self._stubs:
+            self._stubs["list_locations"] = self.grpc_channel.unary_unary(
+                "/google.cloud.location.Locations/ListLocations",
+                request_serializer=locations_pb2.ListLocationsRequest.SerializeToString,
+                response_deserializer=locations_pb2.ListLocationsResponse.FromString,
+            )
+        return self._stubs["list_locations"]
+
+    @property
+    def get_location(
+        self,
+    ) -> Callable[[locations_pb2.GetLocationRequest], locations_pb2.Location]:
+        r"""Return a callable for the list locations method over gRPC."""
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "get_location" not in self._stubs:
+            self._stubs["get_location"] = self.grpc_channel.unary_unary(
+                "/google.cloud.location.Locations/GetLocation",
+                request_serializer=locations_pb2.GetLocationRequest.SerializeToString,
+                response_deserializer=locations_pb2.Location.FromString,
+            )
+        return self._stubs["get_location"]
+
+    @property
+    def kind(self) -> str:
+        return "grpc"
 
 
-__all__ = ("TpuGrpcAsyncIOTransport",)
+__all__ = ("TpuGrpcTransport",)
