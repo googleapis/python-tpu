@@ -5,6 +5,8 @@
       "release-type": "python",
       "extra-files": [
         "google/cloud/tpu/gapic_version.py",
+        "google/cloud/tpu_v1/gapic_version.py",
+        "google/cloud/tpu_v2alpha1/gapic_version.py",
         {
           "type": "json",
           "path": "samples/generated_samples/snippet_metadata_google.cloud.tpu.v2alpha1.json",
