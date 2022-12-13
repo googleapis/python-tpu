@@ -57,10 +57,6 @@ DEFAULT_CLIENT_INFO = gapic_v1.client_info.ClientInfo(
     rest_version=requests_version,
 )
 
-# TODO (numeric enums): This file was generated with the option to
-#   request that the server respond with enums JSON-encoded as
-#   numbers. The code below does not implement that functionality yet.
-
 
 class TpuRestInterceptor:
     """Interceptor for Tpu.
@@ -77,96 +73,109 @@ class TpuRestInterceptor:
 
     .. code-block:: python
         class MyCustomTpuInterceptor(TpuRestInterceptor):
-            def pre_create_node(request, metadata):
+            def pre_create_node(self, request, metadata):
                 logging.log(f"Received request: {request}")
                 return request, metadata
 
-            def post_create_node(response):
+            def post_create_node(self, response):
                 logging.log(f"Received response: {response}")
+                return response
 
-            def pre_delete_node(request, metadata):
+            def pre_delete_node(self, request, metadata):
                 logging.log(f"Received request: {request}")
                 return request, metadata
 
-            def post_delete_node(response):
+            def post_delete_node(self, response):
                 logging.log(f"Received response: {response}")
+                return response
 
-            def pre_generate_service_identity(request, metadata):
+            def pre_generate_service_identity(self, request, metadata):
                 logging.log(f"Received request: {request}")
                 return request, metadata
 
-            def post_generate_service_identity(response):
+            def post_generate_service_identity(self, response):
                 logging.log(f"Received response: {response}")
+                return response
 
-            def pre_get_accelerator_type(request, metadata):
+            def pre_get_accelerator_type(self, request, metadata):
                 logging.log(f"Received request: {request}")
                 return request, metadata
 
-            def post_get_accelerator_type(response):
+            def post_get_accelerator_type(self, response):
                 logging.log(f"Received response: {response}")
+                return response
 
-            def pre_get_guest_attributes(request, metadata):
+            def pre_get_guest_attributes(self, request, metadata):
                 logging.log(f"Received request: {request}")
                 return request, metadata
 
-            def post_get_guest_attributes(response):
+            def post_get_guest_attributes(self, response):
                 logging.log(f"Received response: {response}")
+                return response
 
-            def pre_get_node(request, metadata):
+            def pre_get_node(self, request, metadata):
                 logging.log(f"Received request: {request}")
                 return request, metadata
 
-            def post_get_node(response):
+            def post_get_node(self, response):
                 logging.log(f"Received response: {response}")
+                return response
 
-            def pre_get_runtime_version(request, metadata):
+            def pre_get_runtime_version(self, request, metadata):
                 logging.log(f"Received request: {request}")
                 return request, metadata
 
-            def post_get_runtime_version(response):
+            def post_get_runtime_version(self, response):
                 logging.log(f"Received response: {response}")
+                return response
 
-            def pre_list_accelerator_types(request, metadata):
+            def pre_list_accelerator_types(self, request, metadata):
                 logging.log(f"Received request: {request}")
                 return request, metadata
 
-            def post_list_accelerator_types(response):
+            def post_list_accelerator_types(self, response):
                 logging.log(f"Received response: {response}")
+                return response
 
-            def pre_list_nodes(request, metadata):
+            def pre_list_nodes(self, request, metadata):
                 logging.log(f"Received request: {request}")
                 return request, metadata
 
-            def post_list_nodes(response):
+            def post_list_nodes(self, response):
                 logging.log(f"Received response: {response}")
+                return response
 
-            def pre_list_runtime_versions(request, metadata):
+            def pre_list_runtime_versions(self, request, metadata):
                 logging.log(f"Received request: {request}")
                 return request, metadata
 
-            def post_list_runtime_versions(response):
+            def post_list_runtime_versions(self, response):
                 logging.log(f"Received response: {response}")
+                return response
 
-            def pre_start_node(request, metadata):
+            def pre_start_node(self, request, metadata):
                 logging.log(f"Received request: {request}")
                 return request, metadata
 
-            def post_start_node(response):
+            def post_start_node(self, response):
                 logging.log(f"Received response: {response}")
+                return response
 
-            def pre_stop_node(request, metadata):
+            def pre_stop_node(self, request, metadata):
                 logging.log(f"Received request: {request}")
                 return request, metadata
 
-            def post_stop_node(response):
+            def post_stop_node(self, response):
                 logging.log(f"Received response: {response}")
+                return response
 
-            def pre_update_node(request, metadata):
+            def pre_update_node(self, request, metadata):
                 logging.log(f"Received request: {request}")
                 return request, metadata
 
-            def post_update_node(response):
+            def post_update_node(self, response):
                 logging.log(f"Received response: {response}")
+                return response
 
         transport = TpuRestTransport(interceptor=MyCustomTpuInterceptor())
         client = TpuClient(transport=transport)
