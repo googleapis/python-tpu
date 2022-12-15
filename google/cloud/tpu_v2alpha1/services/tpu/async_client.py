@@ -1066,7 +1066,7 @@ class TpuAsyncClient:
         Returns:
             google.cloud.tpu_v2alpha1.services.tpu.pagers.ListQueuedResourcesAsyncPager:
                 Response for
-                [ListQueuedResources][google.cloud.tpu.v2alpha1.Tpu.ListQueuedResources].
+                   [ListQueuedResources][google.cloud.tpu.v2alpha1.Tpu.ListQueuedResources].
 
                 Iterating over this object will yield results and
                 resolve additional pages automatically.
@@ -1284,7 +1284,7 @@ class TpuAsyncClient:
                 should not be set.
             queued_resource_id (:class:`str`):
                 The unqualified resource name. Should follow the
-                ^[A-Za-z0-9_.~+%-]+$ regex format.
+                ``^[A-Za-z0-9_.~+%-]+$`` regex format.
 
                 This corresponds to the ``queued_resource_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -1523,7 +1523,7 @@ class TpuAsyncClient:
         Returns:
             google.cloud.tpu_v2alpha1.types.GenerateServiceIdentityResponse:
                 Response for
-                [GenerateServiceIdentity][google.cloud.tpu.v2alpha1.Tpu.GenerateServiceIdentity].
+                   [GenerateServiceIdentity][google.cloud.tpu.v2alpha1.Tpu.GenerateServiceIdentity].
 
         """
         # Create or coerce a protobuf request object.
@@ -1610,7 +1610,7 @@ class TpuAsyncClient:
         Returns:
             google.cloud.tpu_v2alpha1.services.tpu.pagers.ListAcceleratorTypesAsyncPager:
                 Response for
-                [ListAcceleratorTypes][google.cloud.tpu.v2alpha1.Tpu.ListAcceleratorTypes].
+                   [ListAcceleratorTypes][google.cloud.tpu.v2alpha1.Tpu.ListAcceleratorTypes].
 
                 Iterating over this object will yield results and
                 resolve additional pages automatically.
@@ -1823,7 +1823,7 @@ class TpuAsyncClient:
         Returns:
             google.cloud.tpu_v2alpha1.services.tpu.pagers.ListRuntimeVersionsAsyncPager:
                 Response for
-                [ListRuntimeVersions][google.cloud.tpu.v2alpha1.Tpu.ListRuntimeVersions].
+                   [ListRuntimeVersions][google.cloud.tpu.v2alpha1.Tpu.ListRuntimeVersions].
 
                 Iterating over this object will yield results and
                 resolve additional pages automatically.
@@ -2029,7 +2029,7 @@ class TpuAsyncClient:
         Returns:
             google.cloud.tpu_v2alpha1.types.GetGuestAttributesResponse:
                 Response for
-                [GetGuestAttributes][google.cloud.tpu.v2alpha1.Tpu.GetGuestAttributes].
+                   [GetGuestAttributes][google.cloud.tpu.v2alpha1.Tpu.GetGuestAttributes].
 
         """
         # Create or coerce a protobuf request object.
