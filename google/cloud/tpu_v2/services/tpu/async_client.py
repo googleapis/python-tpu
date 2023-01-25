@@ -1058,7 +1058,7 @@ class TpuAsyncClient:
         Returns:
             google.cloud.tpu_v2.types.GenerateServiceIdentityResponse:
                 Response for
-                [GenerateServiceIdentity][google.cloud.tpu.v2.Tpu.GenerateServiceIdentity].
+                   [GenerateServiceIdentity][google.cloud.tpu.v2.Tpu.GenerateServiceIdentity].
 
         """
         # Create or coerce a protobuf request object.
@@ -1145,7 +1145,7 @@ class TpuAsyncClient:
         Returns:
             google.cloud.tpu_v2.services.tpu.pagers.ListAcceleratorTypesAsyncPager:
                 Response for
-                [ListAcceleratorTypes][google.cloud.tpu.v2.Tpu.ListAcceleratorTypes].
+                   [ListAcceleratorTypes][google.cloud.tpu.v2.Tpu.ListAcceleratorTypes].
 
                 Iterating over this object will yield results and
                 resolve additional pages automatically.
@@ -1358,7 +1358,7 @@ class TpuAsyncClient:
         Returns:
             google.cloud.tpu_v2.services.tpu.pagers.ListRuntimeVersionsAsyncPager:
                 Response for
-                [ListRuntimeVersions][google.cloud.tpu.v2.Tpu.ListRuntimeVersions].
+                   [ListRuntimeVersions][google.cloud.tpu.v2.Tpu.ListRuntimeVersions].
 
                 Iterating over this object will yield results and
                 resolve additional pages automatically.
@@ -1564,7 +1564,7 @@ class TpuAsyncClient:
         Returns:
             google.cloud.tpu_v2.types.GetGuestAttributesResponse:
                 Response for
-                [GetGuestAttributes][google.cloud.tpu.v2.Tpu.GetGuestAttributes].
+                   [GetGuestAttributes][google.cloud.tpu.v2.Tpu.GetGuestAttributes].
 
         """
         # Create or coerce a protobuf request object.
