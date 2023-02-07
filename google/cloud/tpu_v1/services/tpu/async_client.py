@@ -1014,7 +1014,7 @@ class TpuAsyncClient:
         Returns:
             google.cloud.tpu_v1.services.tpu.pagers.ListTensorFlowVersionsAsyncPager:
                 Response for
-                [ListTensorFlowVersions][google.cloud.tpu.v1.Tpu.ListTensorFlowVersions].
+                   [ListTensorFlowVersions][google.cloud.tpu.v1.Tpu.ListTensorFlowVersions].
 
                 Iterating over this object will yield results and
                 resolve additional pages automatically.
@@ -1227,7 +1227,7 @@ class TpuAsyncClient:
         Returns:
             google.cloud.tpu_v1.services.tpu.pagers.ListAcceleratorTypesAsyncPager:
                 Response for
-                [ListAcceleratorTypes][google.cloud.tpu.v1.Tpu.ListAcceleratorTypes].
+                   [ListAcceleratorTypes][google.cloud.tpu.v1.Tpu.ListAcceleratorTypes].
 
                 Iterating over this object will yield results and
                 resolve additional pages automatically.
