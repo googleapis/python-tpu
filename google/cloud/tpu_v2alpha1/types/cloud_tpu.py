@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+from __future__ import annotations
+
 from typing import MutableMapping, MutableSequence
 
 from google.protobuf import duration_pb2  # type: ignore
@@ -1272,7 +1274,7 @@ class CreateQueuedResourceRequest(proto.Message):
             Required. The parent resource name.
         queued_resource_id (str):
             The unqualified resource name. Should follow the
-            ``^[A-Za-z0-9_.~+%-]+$`` regex format.
+            ^[A-Za-z0-9_.~+%-]+$ regex format.
         queued_resource (google.cloud.tpu_v2alpha1.types.QueuedResource):
             Required. The queued resource.
         request_id (str):
