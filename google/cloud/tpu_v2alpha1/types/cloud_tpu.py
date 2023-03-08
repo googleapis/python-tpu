@@ -637,7 +637,7 @@ class QueuedResource(proto.Message):
             The queueing policy of the QueuedRequest.
         state (google.cloud.tpu_v2alpha1.types.QueuedResourceState):
             Output only. State of the QueuedResource
-            request
+            request.
     """
 
     class Tpu(proto.Message):
@@ -1274,7 +1274,7 @@ class CreateQueuedResourceRequest(proto.Message):
             Required. The parent resource name.
         queued_resource_id (str):
             The unqualified resource name. Should follow the
-            ``^[A-Za-z0-9_.~+%-]+$`` regex format.
+            ^[A-Za-z0-9_.~+%-]+$ regex format.
         queued_resource (google.cloud.tpu_v2alpha1.types.QueuedResource):
             Required. The queued resource.
         request_id (str):
