@@ -1583,7 +1583,7 @@ class TpuClient(metaclass=TpuClientMeta):
                 should not be set.
             queued_resource_id (str):
                 The unqualified resource name. Should follow the
-                ^[A-Za-z0-9_.~+%-]+$ regex format.
+                ``^[A-Za-z0-9_.~+%-]+$`` regex format.
 
                 This corresponds to the ``queued_resource_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
